@@ -31,7 +31,8 @@
     }
 
     canvas {
-      max-height: 260px;
+      width: 100% !important;
+      height: 220px !important;
     }
   </style>
 </head>
@@ -43,67 +44,62 @@
   </div>
 
   <script>
-    // 🔹 รับค่าจาก Thunkable (Query String)
-    const params = new URLSearchParams(window.location.search);
+    function drawChart() {
+      // 🔹 รับค่าจาก Thunkable (Query String)
+      const params = new URLSearchParams(window.location.search);
 
-    const energy = Number(params.get('a')) || 0;
-    const mind   = Number(params.get('b')) || 0;
-    const focus  = Number(params.get('c')) || 0;
-    const life   = Number(params.get('d')) || 0;
-    const total  = Number(params.get('t')) || 0;
+      const energy = Number(params.get('a')) || 0;
+      const mind   = Number(params.get('b')) || 0;
+      const focus  = Number(params.get('c')) || 0;
+      const life   = Number(params.get('d')) || 0;
+      const total  = Number(params.get('t')) || 0;
 
-    const ctx = document.getElementById('myChart');
+      const ctx = document.getElementById('myChart').getContext('2d');
 
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Energy', 'Mind', 'Focus', 'Life', 'Total'],
-        datasets: [{
-          label: 'Score',
-          data: [energy, mind, focus, life, total],
-          backgroundColor: [
-            '#60A5FA', // Energy
-            '#34D399', // Mind
-            '#A78BFA', // Focus
-            '#FB923C', // Life
-            '#1E3A8A'  // Total (เด่น)
-          ],
-          borderRadius: 10
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: '#111827',
-            titleColor: '#fff',
-            bodyColor: '#fff',
-            cornerRadius: 8
-          }
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Energy', 'Mind', 'Focus', 'Life', 'Total'],
+          datasets: [{
+            label: 'Score',
+            data: [energy, mind, focus, life, total],
+            backgroundColor: [
+              '#60A5FA',
+              '#34D399',
+              '#A78BFA',
+              '#FB923C',
+              '#1E3A8A'
+            ],
+            borderRadius: 10
+          }]
         },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              stepSize: 10
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { stepSize: 10 }
             },
-            grid: {
-              color: '#e5e7eb'
+            x: {
+              grid: { display: false }
             }
           },
-          x: {
-            grid: {
-              display: false
-            }
+          animation: {
+            duration: 1000,
+            easing: 'easeOutQuart'
           }
-        },
-        animation: {
-          duration: 1200,
-          easing: 'easeOutQuart'
         }
-      }
-    });
+      });
+    }
+
+    // ✅ สำคัญมากสำหรับ Thunkable WebViewer
+    window.onload = () => {
+      setTimeout(drawChart, 300);
+    };
   </script>
 
 </body>
